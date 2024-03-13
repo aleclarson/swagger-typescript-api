@@ -1,5 +1,5 @@
 {
-  "name": "swagger-typescript-api",
+  "name": "@aleclarson/swagger-typescript-api",
   "version": "13.0.3",
   "description": "Generate typescript/javascript api from swagger schema",
   "scripts": {
