@@ -223,7 +223,7 @@ class SchemaUtils {
     if (schema.allOf || schema.oneOf || schema.anyOf || schema.not) {
       return SCHEMA_TYPES.COMPLEX;
     }
-    if (!_.isEmpty(schema.properties)) {
+    if (!_.isEmpty(schema.properties) || schema.patternProperties) {
       return SCHEMA_TYPES.OBJECT;
     }
     if (schema.type === SCHEMA_TYPES.ARRAY) {

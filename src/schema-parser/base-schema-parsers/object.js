@@ -26,7 +26,7 @@ class ObjectSchemaParser extends MonoSchemaParser {
   }
 
   getObjectSchemaContent = (schema) => {
-    const { properties, additionalProperties } = schema || {};
+    const { properties, additionalProperties, patternProperties } = schema || {};
 
     const propertiesContent = _.map(properties, (property, name) => {
       const required = this.schemaUtils.isPropertyRequired(
@@ -94,6 +94,32 @@ class ObjectSchemaParser extends MonoSchemaParser {
           this.config.Ts.Keyword.Any,
         ),
       });
+    }
+
+    if (patternProperties) {
+      for (const pattern in patternProperties) {
+        const propertySchema = patternProperties[pattern];
+        const patternPropertyType = this.schemaParserFabric
+          .createSchemaParser({
+            schema: propertySchema,
+            schemaPath: [...this.schemaPath, pattern],
+          })
+          .getInlineParseContent();
+
+        // Add dynamic field with pattern as key and property type as value
+        propertiesContent.push({
+          $$raw: { patternProperties: { [pattern]: propertySchema } },
+          description: propertySchema.description || '',
+          isRequired: false,
+          field: this.config.Ts.InterfaceDynamicField(
+            this.config.Ts.UnionType([
+              this.config.Ts.Keyword.String,
+              this.config.Ts.Keyword.Number,
+            ]), // string | number for pattern
+            patternPropertyType,
+          ),
+        });
+      }
     }
 
     return propertiesContent;
