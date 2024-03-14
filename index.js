@@ -328,7 +328,7 @@ const main = async () => {
           name: options.name,
           url: options.path,
           generateRouteTypes: options.generateRouteTypes,
-          generateClient: !!(options.axios || options.client),
+          generateClient: options.client,
           httpClientType: options.axios ? HTTP_CLIENT.AXIOS : options.ky ? HTTP_CLIENT.KY : HTTP_CLIENT.FETCH,
           input: resolve(process.cwd(), options.path),
           output: resolve(process.cwd(), options.output || '.'),
