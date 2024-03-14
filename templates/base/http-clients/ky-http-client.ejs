@@ -12,7 +12,7 @@ import type {
 } from "ky";
 import ky from "ky";
 
-type KyResponse<Data> = Response & {
+interface KyResponse<Data> extends Response {
   json<T extends Data = Data>(): Promise<T>;
 }
 
